@@ -2,53 +2,65 @@ import streamlit as st
 import pandas as pd
 from collections import Counter
 import altair as alt
-import datetime
+import numpy as np
 
 @st.cache
 def fetch_and_clean_data():
-    data = pd.read_csv("data.csv")
+    data = pd.read_csv("data_myear.csv")
     return data
 
 def app():
+
+    st.write("Topic-emotion relationship split by age demographic")
+
     data = fetch_and_clean_data()
 
-    st.write("# EmoMap Covid")
+    first_demo = st.sidebar.selectbox("First Demographic Group", options=['>=40', '30-39',  '19-29', '19-29'])
+    second_demo = st.sidebar.selectbox("Second Demographic Group", options=['30-39',  '19-29', '<=18'])
+    topic = st.sidebar.selectbox("Topic", options=['politics', 'economics', 'vaccine'])
+    emotion = st.sidebar.selectbox("Topic", options=['joy', 'anger', 'sadness', 'fear'])
 
-    start_date = str(st.sidebar.date_input("Starting When?"))
+    data = data[~(data["emotion"] == "none")]
 
-    end_date = str(st.sidebar.date_input("Until When?"))
+    filter_first_demo = ((data["age"] == first_demo) & (data["topic"] == topic))
+    filter_second_demo = ((data["age"] == second_demo) & (data["topic"] == topic))
 
-    mask = (data['dates'] > start_date) & (data['dates'] <= end_date)
-    filtered = data.loc[mask]
+    first_demo_df = data[filter_first_demo]
+    second_demo_df = data[filter_second_demo]
 
-    c1, c2, c3 = st.columns([5, 2, 5])
-    for group, col in zip(['>=40', '<=18', '19-29', '30-39'], [c1, c3, c1, c3]):
+    first_sum = first_demo_df.groupby(["myear"]).count().reset_index()
+    second_sum = second_demo_df.groupby(["myear"]).count().reset_index()
 
-        with col:
-            male_dict = dict(Counter(filtered[filtered["gender"] == "male"]["topic"]))
-            local_sum = sum(male_dict.values())
+    first_demo_df = first_demo_df.groupby(["myear", "emotion"]).count().reset_index()
+    second_demo_df = second_demo_df.groupby(["myear", "emotion"]).count().reset_index()
+
+    first_demo_df = first_demo_df.merge(first_sum, on=["myear"])
+    second_demo_df = second_demo_df.merge(second_sum, on=["myear"])
 
 
 
-            for _ in male_dict:
-                male_dict[_] /= local_sum
 
-            female_dict = dict(Counter(filtered[filtered["gender"] == "female"]["topic"]))
-            local_sum = sum(female_dict.values())
+    classes = []
+    values = []
 
-            for _ in female_dict:
-                female_dict[_] /= local_sum
 
-            st.write(f"{group} Stats")
-            source = pd.DataFrame({
-                'Topics': female_dict.keys(),
-                'Tweets %': female_dict.values()
-            })
+    for base_df, demo in zip([first_demo_df, second_demo_df], [first_demo, second_demo]):
 
-            c = alt.Chart(source).mark_bar().encode(
-                x='Topics',
-                y='Tweets %'
-            )
+        to_data_df = base_df[base_df["emotion_x"] == emotion]
+        print(to_data_df)
+        local_val = to_data_df["topic_x"].values / to_data_df["topic_y"].values
 
-            st.altair_chart(c, use_container_width=True)
+        values.append(local_val)
+        classes.append(f"{emotion}+{demo}")
 
+
+
+    print(classes)
+    print(np.array(values).shape)
+    chart_data = pd.DataFrame(
+        np.array(values).reshape((22, 2)),
+        columns=classes, index=to_data_df["myear"].values.tolist())
+
+
+
+    st.line_chart(chart_data)

@@ -16,7 +16,9 @@ def app():
     c1, c2, c3 = st.columns([2, 8, 2])
 
     with c2:
-        st.write("## Talking About Which Topics")
+        st.write("## What are different age demographics talking about?")
+        st.write("Did >=40 years old respond differently to the pandemic than 18 years old? Were the former more interested "
+                 "in talking about issues with the economy or healthcare?")
 
     start_date = str(st.sidebar.date_input("Starting When?", datetime.date(2020, 1, 17)))
 
@@ -52,7 +54,8 @@ def app():
     c1, c2, c3 = st.columns([2, 8, 2])
 
     with c2:
-        st.write("## General Emotions")
+        st.write("## General Emotional level")
+        st.write("Are people in the age group 19-29 more angry in general than other demographics?")
 
     c1, c2, c3 = st.columns([5, 2, 5])
     for group, col in zip(['>=40', '<=18', '19-29', '30-39'], [c1, c3, c1, c3]):
