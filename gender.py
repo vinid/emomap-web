@@ -14,7 +14,7 @@ def app():
 
     c1, c2, c3 = st.columns([1, 10, 1])
 
-    with c1:
+    with c2:
         st.write("## Talking About Which Topics")
         st.write("See what males and females talk about over the course of the pandemic")
 
@@ -69,7 +69,7 @@ def app():
 
     c1, c2, c3 = st.columns([1, 10, 1])
 
-    with c1:
+    with c2:
         st.write("## Which Emotions")
         st.write("See which are the feelings of males and females the course of the pandemic")
 
