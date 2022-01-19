@@ -11,14 +11,17 @@ def fetch_and_clean_data():
 
 def app():
 
-    st.write("Topic-emotion relationship split by age demographic")
+    st.write("Topic-emotion relationship split by age demographic.")
+    st.write("On the sidebar you can select two demographic groups, a topic and an emotion.")
+    st.write("The plot will show the percentage of tweets that reflect your choice (e.g., tweets by >=40 about politics "
+             "and that display joy.")
 
     data = fetch_and_clean_data()
 
     first_demo = st.sidebar.selectbox("First Demographic Group", options=['>=40', '30-39',  '19-29', '19-29'])
     second_demo = st.sidebar.selectbox("Second Demographic Group", options=['30-39',  '19-29', '<=18'])
     topic = st.sidebar.selectbox("Topic", options=['politics', 'economics', 'vaccine'])
-    emotion = st.sidebar.selectbox("Topic", options=['joy', 'anger', 'sadness', 'fear'])
+    emotion = st.sidebar.selectbox("Emotion", options=['joy', 'anger', 'sadness', 'fear'])
 
     data = data[~(data["emotion"] == "none")]
 
@@ -37,12 +40,8 @@ def app():
     first_demo_df = first_demo_df.merge(first_sum, on=["myear"])
     second_demo_df = second_demo_df.merge(second_sum, on=["myear"])
 
-
-
-
     classes = []
     values = []
-
 
     for base_df, demo in zip([first_demo_df, second_demo_df], [first_demo, second_demo]):
 

@@ -12,10 +12,11 @@ def fetch_and_clean_data():
 def app():
     data = fetch_and_clean_data()
 
-    c1, c2, c3 = st.columns([2, 8, 2])
+    c1, c2, c3 = st.columns([12, 0, 0])
 
-    with c2:
+    with c1:
         st.write("## Talking About Which Topics")
+        st.write("See what males and females talk about over the course of the pandemic")
 
     start_date = str(st.sidebar.date_input("Starting When?", datetime.date(2020, 1, 17)))
 
@@ -66,10 +67,12 @@ def app():
 
         st.altair_chart(c, use_container_width=True)
 
-    c1, c2, c3 = st.columns([2, 8, 2])
+    c1, c2, c3 = st.columns([12, 0, 0])
 
-    with c2:
-        st.write("## General Emotions")
+    with c1:
+        st.write("## Which Emotions")
+        st.write("See which are the feelings of males and females the course of the pandemic")
+
 
     c1, c2, c3 = st.columns([5, 2, 5])
 
