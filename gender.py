@@ -12,7 +12,7 @@ def fetch_and_clean_data():
 def app():
     data = fetch_and_clean_data()
 
-    c1, c2, c3 = st.columns([12, 0, 0])
+    c1, c2, c3 = st.columns([1, 10, 1])
 
     with c1:
         st.write("## Talking About Which Topics")
@@ -67,7 +67,7 @@ def app():
 
         st.altair_chart(c, use_container_width=True)
 
-    c1, c2, c3 = st.columns([12, 0, 0])
+    c1, c2, c3 = st.columns([1, 10, 1])
 
     with c1:
         st.write("## Which Emotions")

@@ -13,7 +13,7 @@ def fetch_and_clean_data():
 def app():
     data = fetch_and_clean_data()
 
-    c1, c2, c3 = st.columns([2, 8, 2])
+    c1, c2, c3 = st.columns([1, 10, 1])
 
     with c2:
         st.write("## What are different age demographics talking about?")
@@ -51,7 +51,7 @@ def app():
 
             st.altair_chart(c, use_container_width=True)
 
-    c1, c2, c3 = st.columns([2, 8, 2])
+    c1, c2, c3 = st.columns([1, 10, 1])
 
     with c2:
         st.write("## General Emotional level")
